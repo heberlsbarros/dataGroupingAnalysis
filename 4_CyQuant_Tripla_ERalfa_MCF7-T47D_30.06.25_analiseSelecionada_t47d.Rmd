@@ -1,0 +1,73 @@
+---
+title: "Aba:**T47D**. Planilha: **CyQuant_Tripla_ERalfa_MCF7-T47D_28.07.25.xlsx**. Análise de grupos selecionados."
+output: html_notebook
+---
+
+```{r}
+# CRIANDO AS PLANILHAS COM DADOS PARA ANÁLISE.
+##!NECESSÁRIO ALTERAR!##
+selec_ppt_10_tsh1a_05_sequ_10 <- rbind (ct_dmso, seq_10, ppt_10, tsh1a_05_seq_10, ppt_10_tsh1a_05_seq_10)
+
+selec_ppt_10_tsh1a_8_ert_10 <- rbind (ct_dmso, ert_10, ppt_10, tsh1a_8_ert_10, ppt_10_tsh1a_8_ert_10)
+
+selec_ppt_10_ly_1_gen_1 <- rbind (ct_dmso, gen_1, ppt_10, ly_1_gen_1, ppt_10_ly_1_gen_1)
+
+selec_ppt_10_ly_4_gen_1 <- rbind (ct_dmso, gen_1, ppt_10, ly_4_gen_1, ppt_10_ly_4_gen_1)
+
+selec_ppt_10_sp_6_gen_1 <- rbind (ct_dmso, gen_1, ppt_10, sp_6_gen_1, ppt_10_sp_6_gen_1)
+
+selec_ppt_10_sr_2_gen_1 <- rbind (ct_dmso, gen_1, ppt_10, sr_2_gen_1, ppt_10_sr_2_gen_1)
+
+selec_ppt_10_sr_8_gen_1 <- rbind (ct_dmso, gen_1, ppt_10, sr_8_gen_1, ppt_10_sr_8_gen_1)
+
+selec_ppt_10_tsh1a_8_ert_1 <- rbind (ct_dmso, ert_1, ppt_10, tsh1a_8_ert_1, ppt_10_tsh1a_8_ert_1)
+
+selec_ppt_10_tsh1a_8_gen_1 <- rbind (ct_dmso, gen_1, ppt_10, tsh1a_8_gen_1, ppt_10_tsh1a_8_gen_1)
+
+
+selec_tam_10_tsh1a_05_sequ_10 <- rbind (ct_dmso, seq_10, tam_10, tsh1a_05_seq_10, tam_10_tsh1a_05_seq_10)
+
+selec_tam_10_tsh1a_8_ert_10 <- rbind (ct_dmso, ert_10, tam_10, tsh1a_8_ert_10, tam_10_tsh1a_8_ert_10)
+
+selec_tam_10_ly_1_gen_1 <- rbind (ct_dmso, gen_1, tam_10, ly_1_gen_1, tam_10_ly_1_gen_1)
+
+selec_tam_10_ly_4_gen_1 <- rbind (ct_dmso, gen_1, tam_10, ly_4_gen_1, tam_10_ly_4_gen_1)
+
+selec_tam_10_sp_6_gen_1 <- rbind (ct_dmso, gen_1, tam_10, sp_6_gen_1, tam_10_sp_6_gen_1)
+
+selec_tam_10_sr_2_gen_1 <- rbind (ct_dmso, gen_1, tam_10, sr_2_gen_1, tam_10_sr_2_gen_1)
+
+selec_tam_10_sr_8_gen_1 <- rbind (ct_dmso, gen_1, tam_10, sr_8_gen_1, tam_10_sr_8_gen_1)
+
+selec_tam_10_tsh1a_8_ert_1 <- rbind (ct_dmso, ert_1, tam_10, tsh1a_8_ert_1, tam_10_tsh1a_8_ert_1)
+
+selec_tam_10_tsh1a_8_gen_1 <- rbind (ct_dmso, gen_1, tam_10, tsh1a_8_gen_1, tam_10_tsh1a_8_gen_1)
+
+
+#Aqui deverão ser listados os dataframes com os grupos individuais que formarão o grupo final de análise, que deverá conter os grupos dmso, droga1, droga3, grupo droga1 + droga3, grupo droga1 + droga2 + droga3. Repetir tantas vezes quanto necessário para criar grupos de todos as combinações do dataset.
+
+#ANÁLISE ESTATÍSTICA
+##!NECESSÁRIO ALTERAR!##
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_tsh1a_05_sequ_10, "selec_ppt_10_tsh1a_05_sequ_10", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_tsh1a_8_ert_10, "selec_ppt_10_tsh1a_8_ert_10", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_ly_1_gen_1, "selec_ppt_10_ly_1_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_ly_4_gen_1, "selec_ppt_10_ly_4_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_sp_6_gen_1, "selec_ppt_10_sp_6_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_sr_2_gen_1, "selec_ppt_10_sr_2_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_sr_8_gen_1, "selec_ppt_10_sr_8_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_tsh1a_8_ert_1, "selec_ppt_10_tsh1a_8_ert_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_ppt_10_tsh1a_8_gen_1, "selec_ppt_10_tsh1a_8_gen_1", "fluorescencia")
+
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_tsh1a_05_sequ_10, "selec_tam_10_tsh1a_05_sequ_10", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_tsh1a_8_ert_10, "selec_tam_10_tsh1a_8_ert_10", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_ly_1_gen_1, "selec_tam_10_ly_1_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_ly_4_gen_1, "selec_tam_10_ly_4_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_sp_6_gen_1, "selec_tam_10_sp_6_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_sr_2_gen_1, "selec_tam_10_sr_2_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_sr_8_gen_1, "selec_tam_10_sr_8_gen_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_tsh1a_8_ert_1, "selec_tam_10_tsh1a_8_ert_1", "fluorescencia")
+graficos_significancia_tripla_analise_agrupada(selec_tam_10_tsh1a_8_gen_1, "selec_tam_10_tsh1a_8_gen_1", "fluorescencia")
+
+#Aqui deverão ser listados as combinações definidas na seção anterior. Repetir tantas vezes quanto necessário para criar grupos de todos as combinações do dataset.
+
+```

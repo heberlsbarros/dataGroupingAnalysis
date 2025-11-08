@@ -1,0 +1,21 @@
+---
+title: "Linhagem:**T47D**. Planilha: **CyQuant_Tripla_ERalfa_MCF7-T47D_02.07.25.xlsx**. Análise de triplas."
+output: html_notebook
+---
+
+
+```{r Linhagem MCF7, include=F} 
+## Montagem dos grupos de análise:
+### PPT:
+trip_ppt_10 <- rbind (ct_dmso, ppt_10_ly_1_gen_1, ppt_10_ly_4_gen_1, ppt_10_sp_6_gen_1, ppt_10_sr_2_gen_1, ppt_10_tsh1a_8_gen_1, ppt_10_tsh1a_05_seq_10, ppt_10_tsh1a_8_ert_1, ppt_10_tsh1a_8_ert_10, ppt_10_sr_8_gen_1)
+
+### Tamoxifeno:
+trip_tam_10 <- rbind (ct_dmso, tam_10_ly_1_gen_1, tam_10_ly_4_gen_1, tam_10_sp_6_gen_1, tam_10_sr_2_gen_1, tam_10_tsh1a_8_gen_1, tam_10_tsh1a_05_seq_10, tam_10_tsh1a_8_ert_1, tam_10_tsh1a_8_ert_10, tam_10_sr_8_gen_1)
+
+
+
+#ANÁLISE ESTATÍSTICA PARA CADA GRUPO
+graficos_significancia_tripla_triplasjuntas (trip_ppt_10, "trip_ppt_10", "fluorescencia")
+graficos_significancia_tripla_triplasjuntas (trip_tam_10, "trip_tam_10", "fluorescencia")
+
+```

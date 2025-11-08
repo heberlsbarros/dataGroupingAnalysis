@@ -1,0 +1,174 @@
+---
+title: "Aba:**T47D**. Planilha: **CyQuant_Tripla_ERalfa_MCF7-T47D_28.07.25.xlsx**. Análise de todos grupos."
+output: html_notebook
+---
+
+
+```{r Preparo dos grupos, include=F} 
+## ATRIBUINDO OS DADOS DE LEITURA AO OBJETO DATASET_ANALISE. ALTERAR O NOME DO DATAFRAME QUE SERÁ ATRIBUÍDO, DE ACORDO COM O NOME DO OBJETO GERADO NO SCRIPT 2.
+##!NECESSÁRIO ALTERAR!##
+dataset_analise <- dataset_t47d #Alterar, quando necessário, para o nome do dataset a ser analisado.
+
+## SELECIONANDO O CT MEIO E TIRANDO A MÉDIA
+##!NÃO É NECESSÁRIO ALTERAR (EXCETO SE MUDAR A NATUREZA DO SINAL INVESTIGADO, QUE ATUALMENTE ESTÁ LISTADO COMO "FLOURESCÊNCIA")!##
+ct_meio = dataset_analise %>% filter(droga1 == 'CT Meio') #Cria um dataframe com todos valores de fluorescência das linhas com "CT Meio" na coluna "droga1"
+media_ct_meio = round(mean(ct_meio$fluorescencia),2)
+
+### AJUSTANDO OS VALORES DA FLUORESCENCIA COM O CT MEIO
+##!NÃO É NECESSÁRIO ALTERAR (EXCETO SE MUDAR A NATUREZA DO SINAL INVESTIGADO, QUE ATUALMENTE ESTÁ LISTADO COMO "FLOURESCÊNCIA")!##
+dataset_analise$fluorescencia_ajustada = dataset_analise$fluorescencia - media_ct_meio #Adiciona uma coluna de fluorescência ajustada que mostra o valor da fluorescência para cada linha subtraída pela média do CT Meio.
+dataset_analise$fluorescencia = dataset_analise$fluorescencia_ajustada
+
+## RECRIANDO AS PLANILHAS DE CT MEIO E CRIANDO PLANILHA DE CT DMSO
+ct_meio = dataset_analise %>% filter(droga1 == 'CT Meio') 
+
+ct_dmso = dataset_analise %>% filter(droga1== 'CT DMSO')
+
+#PREPARANDO AS PLANILHAS DE CONTROLES DE 1 DROGA. FAZER 1 OBJETO PARA CADA CONCENTRAÇÃO DE CADA DROGA.
+##Controles de drogas individuais:
+##!NECESSÁRIO ALTERAR!##
+ppt_10 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Nada" & droga3 == "Nada")
+tam_10 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Nada" & droga3 == "Nada")
+#Alterar para o nome adequado da droga1, exatamente como está escrita no dataframe. Repetir para tantas drogas 1 quanto houverem. Se não houver concentrações diferentes de droga1, retirar o trecho "& concentracao_droga1 == "X". O nome desse objeto deverá ficar entre 2 e 4 dígitos acrescido de, no máximo, dois dígitos que descrevam a concentração (quando houver mais de uma). Esse nome deverá ser padrão para o restante da análise. Por fim, se houver mais de uma linhagem celular na placa, acrescentar o nome da linhagem ao final do nome do objeto. Sempre que houver qualquer acréscimo de informação ao nome, separar com underline. Exemplo: tam10_sp8_seq10_MCF7 é o nome de um objeto que é composto por: tamoxifeno em concentração de 10 (unidade desconhecida) + SP100030 na concentração de 8 (unidade desconhecida) + S-equol na concentração de 10 (unidade desconhecida) em um poço com células da linhagem MCF7.
+
+ly_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "LY294002" & concentracao_droga2 == "1 uM" & droga3 == "Nada")
+ly_4 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "LY294002" & concentracao_droga2 == "4 uM" & droga3 == "Nada")
+sp_6 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "SP100030" & droga3 == "Nada")
+sr_2 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "SR11302" & concentracao_droga2 == "2 uM" & droga3 == "Nada")
+tsh1a_05 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "0,5 uM" & droga3 == "Nada")
+tsh1a_8 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Nada")
+sr_8 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "SR11302" & concentracao_droga2 == "8 uM" & droga3 == "Nada")
+#Alterar para o nome adequado da droga2, exatamente como está escrita no dataframe. Repetir para tantas drogas 2 quanto houverem. Se não houver concentrações diferentes de droga2, retirar o trecho "& concentracao_droga2 == "X". O nome desse objeto deverá ficar entre 2 e 4 dígitos acrescido de, no máximo, dois dígitos que descrevam a concentração (quando houver mais de uma). Esse nome deverá ser padrão para o restante da análise.Por fim, se houver mais de uma linhagem celular na placa, acrescentar o nome da linhagem ao final do nome do objeto. Sempre que houver qualquer acréscimo de informação ao nome, separar com underline. Exemplo: tam10_sp8_seq10_MCF7 é o nome de um objeto que é composto por: tamoxifeno em concentração de 10 (unidade desconhecida) + SP100030 na concentração de 8 (unidade desconhecida) + S-equol na concentração de 10 (unidade desconhecida) em um poço com células da linhagem MCF7.
+gen_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Nada" & droga3 == "Genisteína")
+seq_10 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Nada" & droga3 == "S_equol")
+ert_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Nada" & droga3 == "Erteberel" & concentracao_droga3 == "1 nM")
+ert_10 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Nada" & droga3 == "Erteberel" & concentracao_droga3 == "10 nM")
+#Alterar para o nome adequado da droga3, exatamente como está escrita no dataframe. Repetir para tantas drogas 3 quanto houverem. Se não houver concentrações diferentes de droga3, retirar o trecho "& concentracao_droga1 == "X". O nome desse objeto deverá ficar entre 2 e 4 dígitos acrescido de, no máximo, dois dígitos que descrevam a concentração (quando houver mais de uma). Esse nome deverá ser padrão para o restante da análise.Por fim, se houver mais de uma linhagem celular na placa, acrescentar o nome da linhagem ao final do nome do objeto. Sempre que houver qualquer acréscimo de informação ao nome, separar com underline. Exemplo: tam10_sp8_seq10_MCF7 é o nome de um objeto que é composto por: tamoxifeno em concentração de 10 (unidade desconhecida) + SP100030 na concentração de 8 (unidade desconhecida) + S-equol na concentração de 10 (unidade desconhecida) em um poço com células da linhagem MCF7.
+
+
+#PREPARANDO AS PLANILHAS DE CONTROLES DE 2 DROGAS. FAZER 1 OBJETO PARA CADA COMBINAÇÃO DAS DROGAS, LEVANDO EM CONTA AS CONCENTRAÇÕES DE CADA UM.
+## Controles de duplas de drogas:
+##!NECESSÁRIO ALTERAR!##
+### Duplas droga1 + droga2 ou droga1 + droga3:
+ppt_10_ly_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "LY294002" & concentracao_droga2 == "1 uM" & droga3 == "Nada")
+ppt_10_ly_4 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "LY294002" & concentracao_droga2 == "4 uM" & droga3 == "Nada")
+ppt_10_sp_6 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "SP100030" & droga3 == "Nada")
+ppt_10_sr_2 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "SR11302" & concentracao_droga2 == "2 uM" & droga3 == "Nada")
+ppt_10_sr_8 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "SR11302" & concentracao_droga2 == "8 uM" & droga3 == "Nada")
+ppt_10_tsh1a_05 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "0,5 uM" & droga3 == "Nada")
+ppt_10_tsh1a_8 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Nada")
+
+tam_10_ly_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "LY294002" & concentracao_droga2 == "1 uM" & droga3 == "Nada")
+tam_10_ly_4 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "LY294002" & concentracao_droga2 == "4 uM" & droga3 == "Nada")
+tam_10_sp_6 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "SP100030" & droga3 == "Nada")
+tam_10_sr_2 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "SR11302" & concentracao_droga2 == "2 uM" & droga3 == "Nada")
+tam_10_sr_8 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "SR11302" & concentracao_droga2 == "8 uM" & droga3 == "Nada")
+tam_10_tsh1a_05 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "0,5 uM" & droga3 == "Nada")
+tam_10_tsh1a_8 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Nada")
+
+#Seguir o mesmo fluxo de trabalho apresentado para drogas individuais, criando novos objetos para contemplar todas as variáveis indicadas previamente: linhagem celular, concentrações de drogas, nomes de drogas.
+
+ppt_10_gen_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Nada" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+ppt_10_seq_10 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Nada" & droga3 == "S_equol")
+ppt_10_ert_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Nada" & droga3 == "Erteberel" & concentracao_droga3 == "1 nM")
+ppt_10_ert_10 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Nada" & droga3 == "Erteberel" & concentracao_droga3 == "10 nM")
+
+tam_10_gen_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Nada" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+tam_10_seq_10 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Nada" & droga3 == "S_equol")
+tam_10_ert_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Nada" & droga3 == "Erteberel" & concentracao_droga3 == "1 nM")
+tam_10_ert_10 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Nada" & droga3 == "Erteberel" & concentracao_droga3 == "10 nM")
+#Seguir o mesmo fluxo de trabalho apresentado para drogas individuais, criando novos objetos para contemplar todas as variáveis indicadas previamente: linhagem celular, concentrações de drogas, nomes de drogas.
+
+ly_1_gen_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "LY294002" & concentracao_droga2 == "1 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+ly_4_gen_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "LY294002" & concentracao_droga2 == "4 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+sp_6_gen_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "SP100030" & concentracao_droga2 == "6 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+sr_2_gen_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "SR11302" & concentracao_droga2 == "2 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+sr_8_gen_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "SR11302" & concentracao_droga2 == "8 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+tsh1a_05_seq_10 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "0,5 uM" & droga3 == "S_equol" & concentracao_droga3 == "10 nM")
+tsh1a_8_gen_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+tsh1a_8_ert_1 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Erteberel" & concentracao_droga3 == "1 nM")
+tsh1a_8_ert_10 <- dataset_analise %>% filter (droga1 == "Nada" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Erteberel" & concentracao_droga3 == "10 nM")
+
+#Seguir o mesmo fluxo de trabalho apresentado para drogas individuais, criando novos objetos para contemplar todas as variáveis indicadas previamente: linhagem celular, concentrações de drogas, nomes de drogas.
+
+#PREPARANDO AS PLANILHAS DE CONTROLES DE 3 DROGAS. FAZER 1 OBJETO PARA CADA COMBINAÇÃO DAS DROGAS, LEVANDO EM CONTA AS CONCENTRAÇÕES DE CADA UM.
+## Controles de trios de drogas:
+##!NECESSÁRIO ALTERAR!##
+### Duplas droga1 + droga2 + droga3:
+ppt_10_ly_1_gen_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "LY294002" & concentracao_droga2 == "1 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+ppt_10_ly_4_gen_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "LY294002" & concentracao_droga2 == "4 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+ppt_10_sp_6_gen_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "SP100030" & concentracao_droga2 == "6 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+ppt_10_sr_2_gen_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "SR11302" & concentracao_droga2 == "2 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+ppt_10_tsh1a_8_gen_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+ppt_10_tsh1a_05_seq_10 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "0,5 uM" & droga3 == "S_equol" & concentracao_droga3 == "10 nM")
+ppt_10_tsh1a_8_ert_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Erteberel" & concentracao_droga3 == "1 nM")
+ppt_10_tsh1a_8_ert_10 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Erteberel" & concentracao_droga3 == "10 nM")
+ppt_10_sr_8_gen_1 <- dataset_analise %>% filter (droga1 == "PPT" & droga2 == "SR11302" & concentracao_droga2 == "8 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+
+
+
+tam_10_ly_1_gen_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "LY294002" & concentracao_droga2 == "1 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+tam_10_ly_4_gen_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "LY294002" & concentracao_droga2 == "4 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+tam_10_sp_6_gen_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "SP100030" & concentracao_droga2 == "6 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+tam_10_sr_2_gen_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "SR11302" & concentracao_droga2 == "2 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+tam_10_tsh1a_8_gen_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+tam_10_tsh1a_05_seq_10 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "0,5 uM" & droga3 == "S_equol" & concentracao_droga3 == "10 nM")
+tam_10_tsh1a_8_ert_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Erteberel" & concentracao_droga3 == "1 nM")
+tam_10_tsh1a_8_ert_10 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "Tanshinona_IA" & concentracao_droga2 == "8 uM" & droga3 == "Erteberel" & concentracao_droga3 == "10 nM")
+tam_10_sr_8_gen_1 <- dataset_analise %>% filter (droga1 == "Tamoxifeno" & droga2 == "SR11302" & concentracao_droga2 == "8 uM" & droga3 == "Genisteína" & concentracao_droga3 == "1 nM")
+
+
+
+#Seguir o mesmo fluxo de trabalho apresentado para drogas individuais, criando novos objetos para contemplar todas as variáveis indicadas previamente: linhagem celular, concentrações de drogas, nomes de drogas.
+
+```
+
+
+
+```{r}
+# CRIANDO AS PLANILHAS COM DADOS PARA ANÁLISE.
+comb_ppt_10_ly_1_gen_1 <- rbind(ct_dmso, ppt_10, ly_1, gen_1, ppt_10_ly_1, ppt_10_gen_1, ly_1_gen_1, ppt_10_ly_1_gen_1)
+comb_ppt_10_ly_4_gen_1 <- rbind(ct_dmso, ppt_10, ly_4, gen_1, ppt_10_ly_4, ppt_10_gen_1, ly_4_gen_1, ppt_10_ly_4_gen_1)
+comb_ppt_10_sp_6_gen_1 <- rbind(ct_dmso, ppt_10, sp_6, gen_1, ppt_10_sp_6, ppt_10_gen_1, sp_6_gen_1, ppt_10_sp_6_gen_1)
+comb_ppt_10_sr_2_gen_1 <- rbind(ct_dmso, ppt_10, sr_2, gen_1, ppt_10_sr_2, ppt_10_gen_1, sr_2_gen_1, ppt_10_sr_2_gen_1)
+comb_ppt_10_tsh1a_8_gen_1 <- rbind(ct_dmso, ppt_10, tsh1a_8, gen_1, ppt_10_tsh1a_8, ppt_10_gen_1, tsh1a_8_gen_1, ppt_10_tsh1a_8_gen_1)
+comb_ppt_10_tsh1a_05_seq_10 <- rbind(ct_dmso, ppt_10, tsh1a_05, seq_10, ppt_10_tsh1a_05, ppt_10_seq_10, tsh1a_05_seq_10, ppt_10_tsh1a_05_seq_10)
+comb_ppt_10_tsh1a_8_ert_1 <- rbind(ct_dmso, ppt_10, tsh1a_8, ert_1, ppt_10_tsh1a_8, ppt_10_ert_1, tsh1a_8_ert_1, ppt_10_tsh1a_8_ert_1)
+comb_ppt_10_tsh1a_8_ert_10 <- rbind(ct_dmso, ppt_10, tsh1a_8, ert_10, ppt_10_tsh1a_8, ppt_10_ert_10, tsh1a_8_ert_10, ppt_10_tsh1a_8_ert_10)
+comb_ppt_10_sr_8_gen_1 <- rbind(ct_dmso, ppt_10, sr_8, gen_1, ppt_10_sr_8, ppt_10_gen_1, sr_8_gen_1, ppt_10_sr_8_gen_1)
+
+comb_tam_10_ly_1_gen_1 <- rbind(ct_dmso, tam_10, ly_1, gen_1, tam_10_ly_1, tam_10_gen_1, ly_1_gen_1, tam_10_ly_1_gen_1)
+comb_tam_10_ly_4_gen_1 <- rbind(ct_dmso, tam_10, ly_4, gen_1, tam_10_ly_4, tam_10_gen_1, ly_4_gen_1, tam_10_ly_4_gen_1)
+comb_tam_10_sp_6_gen_1 <- rbind(ct_dmso, tam_10, sp_6, gen_1, tam_10_sp_6, tam_10_gen_1, sp_6_gen_1, tam_10_sp_6_gen_1)
+comb_tam_10_sr_2_gen_1 <- rbind(ct_dmso, tam_10, sr_2, gen_1, tam_10_sr_2, tam_10_gen_1, sr_2_gen_1, tam_10_sr_2_gen_1)
+comb_tam_10_tsh1a_8_gen_1 <- rbind(ct_dmso, tam_10, tsh1a_8, gen_1, tam_10_tsh1a_8, tam_10_gen_1, tsh1a_8_gen_1, tam_10_tsh1a_8_gen_1)
+comb_tam_10_tsh1a_05_seq_10 <- rbind(ct_dmso, tam_10, tsh1a_05, seq_10, tam_10_tsh1a_05, tam_10_seq_10, tsh1a_05_seq_10, tam_10_tsh1a_05_seq_10)
+comb_tam_10_tsh1a_8_ert_1 <- rbind(ct_dmso, tam_10, tsh1a_8, ert_1, tam_10_tsh1a_8, tam_10_ert_1, tsh1a_8_ert_1, tam_10_tsh1a_8_ert_1)
+comb_tam_10_tsh1a_8_ert_10 <- rbind(ct_dmso, tam_10, tsh1a_8, ert_10, tam_10_tsh1a_8, tam_10_ert_10, tsh1a_8_ert_10, tam_10_tsh1a_8_ert_10)
+comb_tam_10_sr_8_gen_1 <- rbind(ct_dmso, tam_10, sr_8, gen_1, tam_10_sr_8, tam_10_gen_1, sr_8_gen_1, tam_10_sr_8_gen_1)
+
+#Aqui deverão ser listados os dataframes com os grupos individuais que formarão o grupo final de análise, que deverá conter os grupos dmso, droga1, droga2, droga3, grupo droga1 + droga2, grupo droga1 + droga3, grupo droga2 + droga3, grupo droga1 + droga2 + droga3. Repetir tantas vezes quanto necessário para criar grupos de todos as combinações do dataset.
+
+#ANÁLISE ESTATÍSTICA PARA DROGA 1 LY294002
+graficos_significancia_tripla(comb_ppt_10_ly_1_gen_1, "comb_ppt_10_ly_1_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_ppt_10_ly_4_gen_1, "comb_ppt_10_ly_4_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_ppt_10_sp_6_gen_1, "comb_ppt_10_sp_6_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_ppt_10_sr_2_gen_1, "comb_ppt_10_sr_2_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_ppt_10_tsh1a_8_gen_1, "comb_ppt_10_tsh1a_8_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_ppt_10_tsh1a_05_seq_10, "comb_ppt_10_tsh1a_05_seq_10", "fluorescencia")
+graficos_significancia_tripla(comb_ppt_10_tsh1a_8_ert_1, "comb_ppt_10_tsh1a_8_ert_1", "fluorescencia")
+graficos_significancia_tripla(comb_ppt_10_tsh1a_8_ert_10, "comb_ppt_10_tsh1a_8_ert_10", "fluorescencia")
+graficos_significancia_tripla(comb_ppt_10_sr_8_gen_1, "comb_ppt_10_sr_8_gen_1", "fluorescencia")
+
+graficos_significancia_tripla(comb_tam_10_ly_1_gen_1, "comb_tam_10_ly_1_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_tam_10_ly_4_gen_1, "comb_tam_10_ly_4_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_tam_10_sp_6_gen_1, "comb_tam_10_sp_6_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_tam_10_sr_2_gen_1, "comb_tam_10_sr_2_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_tam_10_tsh1a_8_gen_1, "comb_tam_10_tsh1a_8_gen_1", "fluorescencia")
+graficos_significancia_tripla(comb_tam_10_tsh1a_05_seq_10, "comb_tam_10_tsh1a_05_seq_10", "fluorescencia")
+graficos_significancia_tripla(comb_tam_10_tsh1a_8_ert_1, "comb_tam_10_tsh1a_8_ert_1", "fluorescencia")
+graficos_significancia_tripla(comb_tam_10_tsh1a_8_ert_10, "comb_tam_10_tsh1a_8_ert_10", "fluorescencia")
+graficos_significancia_tripla(comb_tam_10_sr_8_gen_1, "comb_tam_10_sr_8_gen_1", "fluorescencia")
+ #Aqui deverão ser listados as combinações definidas na seção anterior. Repetir tantas vezes quanto necessário para criar grupos de todos as combinações do dataset.
+
+```
